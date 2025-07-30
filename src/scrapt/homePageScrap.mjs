@@ -1,6 +1,7 @@
 import puppeteer from "puppeteer";
 
-const main = async (url) => {
+export const homeScrap = async (url) => {
+  try{
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
 
@@ -12,9 +13,7 @@ const main = async (url) => {
       let temp = [];
       productEls.forEach((el) => {
         temp.push({
-          name: el.querySelector(".product-title")?.innerText || "",
           link: el.querySelector("a")?.href || "",
-          price: el.querySelector(".price")?.innerText || "",
         });
       });
       return temp; // বাইরে পাঠালাম
@@ -29,7 +28,7 @@ const main = async (url) => {
     const nextSelector = 'ul.pagination li a[rel="next"], ul.pagination li a[title="layout.pagination.next_html"]';
     const hasNext = await page.$(nextSelector);
     if (!hasNext) {
-      console.log("No more pages. Scraping complete!");
+      console.error("No more pages. Scraping complete!");
       break;
     }
 
@@ -46,9 +45,12 @@ const main = async (url) => {
       prevCount
     );
   }
-  console.log("collectedArray",collectedArray);
-
   await browser.close();
+  return collectedArray;
+}
+catch(err){console.error(err.message)}
+finally{console.log("Error Message")}
+ 
 };
 
-await main("https://www.mollyjogger.com/collections/inventory");
+
