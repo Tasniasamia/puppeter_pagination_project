@@ -2,20 +2,18 @@ import puppeteer from "puppeteer";
 import { parseProduct } from "../parse/parseProduct.mjs";
 
 export const productScrapt = async (url, url2) => {
-  try{
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
-
   await page.goto(url);
- 
+  try{
   while (true) {
     const findURL = await page.$(`a[href='${url2}']`);
     if (findURL) {
       await page.click(`a[href='${url2}']`);
       const parsedData=parseProduct(await page.content());
-      console.log("parsedData",parsedData);
-  
-      await browser.close();
+      // console.log("parsedData",parsedData);
+      
+      return parsedData;
       break;
     }
     const nextSelector =
@@ -28,7 +26,7 @@ export const productScrapt = async (url, url2) => {
   }
 }
 catch(err){console.error(err.message)}
-finally{console.log("Error Message")}
+finally{await browser.close();}
 };
 // await productScrapt(
 //   "https://www.mollyjogger.com/collections/inventory",
