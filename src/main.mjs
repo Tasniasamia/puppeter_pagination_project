@@ -81,25 +81,28 @@ export const main = async (url,replaceURL) => {
       }
 
       // createMany call (skipDuplicates ছাড়া)
-      for (const p of uniqueData) {
-        try {
-          // ডাটাবেসে আগেই আছে কিনা চেক করো
-          const exists = await prisma.product.findUnique({
-            where: { link: p.link },
-          });
+      // for (const p of uniqueData) {
+      //   try {
+      //     // ডাটাবেসে আগেই আছে কিনা চেক করো
+      //     const exists = await prisma.product.findUnique({
+      //       where: { link: p.link },
+      //     });
 
-          if (!exists) {
-            await prisma.product.create({ data: p });
-          }
-        } catch (err) {
-          console.log(`❌ Error inserting ${p.link}:`, err.message);
-        }
+      //     if (!exists) {
+      //       await prisma.product.create({ data: p });
+      //     }
+      //   } catch (err) {
+      //     console.log(`❌ Error inserting ${p.link}:`, err.message);
+      //   }
+      // }
+      if (uniqueData?.length > 0) {
+        return uniqueData;
       }
     }
-    const productAll = await prisma.product.findMany();
-    if (productAll.length > 0) {
-      return productAll;
-    }
+    // const productAll = await prisma.product.findMany();
+    // if (productAll.length > 0) {
+    //   return productAll;
+    // }
   } catch (err) {
     console.error("Error in main:", err);
   } finally {
