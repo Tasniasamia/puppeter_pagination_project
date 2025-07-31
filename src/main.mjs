@@ -25,10 +25,10 @@ const linkCollect = async (url) => {
   }
 };
 
-const main = async () => {
+export const main = async (url,replaceURL) => {
   try {
     const allLinks = await linkCollect(
-      "https://www.mollyjogger.com/collections/inventory"
+      url
     );
     console.log("All Links:", allLinks);
 
@@ -41,11 +41,11 @@ const main = async () => {
 
     for (let el of allLinks) {
       const fullUrl = el.link;
-      const shortUrl = fullUrl.replace("https://www.mollyjogger.com", "");
+      const shortUrl = fullUrl.replace(replaceURL, "");
 
       // product data scrape
       const productData = await productScrapt(
-        "https://www.mollyjogger.com/collections/inventory",
+        url,
         shortUrl
       );
 
@@ -106,4 +106,4 @@ const main = async () => {
   }
 };
 
-await main();
+
